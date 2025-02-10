@@ -18,6 +18,9 @@ Groovy works really well with dynamic properties.
 
 # Next steps
 Just ideas, there is no guarantee that I will include these options
+* [ ] Remove Table Builder from this project
+* [ ] Include Samples
+* [ ] Create tests
 * [ ] Support other input formats
   * [x] YAML
   * [x] CSV

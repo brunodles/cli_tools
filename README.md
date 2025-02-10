@@ -9,7 +9,8 @@ Can also format then into other formats like MarkDown and Jira.
 [More](table_builder)
 
 ## GINQ CLI
-
+Utility to execute SQL-Like scripts using Files as data sources.
+[More](ginq_cli)
 
 # Future ideas
 * [ ] Create the CLI for the Table Builder
