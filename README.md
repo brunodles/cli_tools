@@ -8,6 +8,9 @@ This could help to create tables for terminal application
 Can also format then into other formats like MarkDown and Jira.
 [More](table_builder)
 
+## GINQ CLI
+
+
 # Future ideas
 * [ ] Create the CLI for the Table Builder
 * [ ] Create a shell interpreter for [GINQ](https://groovy-lang.org/using-ginq.html), so it can be used from CLI. Move content from [Query Interpreter](https://github.com/brunodles/AndroidShellUtils/tree/main/query_interpreter) 

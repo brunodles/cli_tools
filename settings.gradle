@@ -4,3 +4,4 @@ plugins {
 rootProject.name = 'CLI-Tools'
 
 include("table_builder")
+include("ginq_cli")
