@@ -7,14 +7,12 @@ plugins {
 group 'com.bruondles.groovy'
 ext.artifactId = "ginq_cli"
 version '0.1.0'
-mainClassName = 'com.brunodles.ginq_cli.GroovyInterpreter'
+mainClassName = 'com.brunodles.ginq_cli.CliMainClass'
 
 sourceCompatibility = 1.8
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation project(":table_builder")
 
     // Groovy Engine / runtime
     implementation 'org.apache.groovy:groovy-all:4.0.12'
@@ -25,6 +23,7 @@ dependencies {
 }
 
 jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     manifest {
         attributes(
                 'Class-Path':
@@ -34,18 +33,19 @@ jar {
     }
 
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     into ''
 }
 
 task fatJar(type: Jar) {
+    duplicatesStrategy(DuplicatesStrategy.WARN)
     manifest {
         attributes 'Main-Class': mainClassName
     }
     archiveClassifier = "all"
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar
