@@ -40,11 +40,11 @@ MarkDown
 | r1   |   r2  |   r3 |
 ```
 
-## Next Steps
+## Possible Next Steps
 * [ ] Parameterized version of the existing formats
 * [ ] Create computation/aggregation cells
 * [ ] Create formula cells?
-* [ ] Create a terminal CLI that could receive input from Pipe `|`
+* [ ] Create a CLI that can receive input from Pipe `|`, it would allow other scripts to be formated directly from terminal, similar to the `column` command 
 
 ## How to install?
 Download the source code and install on maven local.
