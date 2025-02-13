@@ -1,5 +1,7 @@
 package com.brunodles.gurl.specs
 
+import groovy.json.JsonBuilder
+
 /**
  * A builder for creating Maps
  *
@@ -16,20 +18,37 @@ class KeyValueBuilder extends GroovyObjectSupport {
         content[key] = value
     }
 
+    def call(Closure c) {
+        c.delegate = this
+        c.resolveStrategy = Closure.DELEGATE_ONLY
+        c.call()
+    }
+
     Object invokeMethod(String name, Object args) {
         if (args == null)
             return null
 
-        if (Object[].class.isAssignableFrom(args.getClass())) {
+        if (Collection.isInstance(args)) {
+            def arr = (Collection) args
+            dealWithCollection(name, args, arr)
+        } else if (Object[].class.isAssignableFrom(args.getClass())) {
             Object[] arr = (Object[]) args
-            if (arr.length == 0) {
-                content[name] = ""
-            } else if (arr.length == 1) {
-                content[name] = arr[0].toString()
-            } else {
-                content[name] = args.toString()
-            }
+            dealWithCollection(name, args, arr)
+        } else if (Map.isInstance(args)) {
+            content[name] = new JsonBuilder(args).toString()
+        } else {
+            //todo: add a custom logger?
+            println "Type not found: $name ${args}"
+            content[name] = args.toString()
         }
         return null
+    }
+
+    private def dealWithCollection(String name, Object args, def arr) {
+        content[name] = switch (arr.length) {
+            case (0) -> ""
+            case (1) -> arr[0].toString()
+            default -> args.toString()
+        }
     }
 }
