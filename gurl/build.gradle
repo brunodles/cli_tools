@@ -18,8 +18,14 @@ dependencies {
     implementation 'org.apache.groovy:groovy-all:4.0.12'
     implementation 'org.apache.groovy:groovy-ginq:4.0.12'
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation "io.mockk:mockk:1.8.13"
+    testImplementation "org.spockframework:spock-core:2.4-M1-groovy-4.0"
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 jar {
