@@ -20,25 +20,21 @@ abstract class GurlDsl extends Script {
     /** common variables in case the user run this without any external properties */
     private def aliasesBuilder = new KeyValueBuilder()
 
+    /** Create the metadata section, which is a json builder allowing a tree structure */
     def metadata(@DelegatesTo(JsonBuilder) Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_ONLY
         metadataBuilder.call(closure)
         println "Metadata = ${metadataBuilder.toString()}"
     }
 
+    /** Create the key-value map that will be used for allowing aliases */
     def aliases(@DelegatesTo(KeyValueBuilder) Closure closure) {
         def code = closure.rehydrate(aliasesBuilder, this, this)
         code.resolveStrategy = Closure.DELEGATE_ONLY
         code()
     }
 
-//    def request(@DelegatesTo(RequestSpec) Closure closure) {
-//        def spec = new RequestSpec(aliasesBuilder.content())
-//        def code = closure.rehydrate(spec, this, this)
-//        code.resolveStrategy = Closure.DELEGATE_ONLY
-//        code()
-//    }
-
+    /** Create the request json that should follow the Request Schema */
     def request(@DelegatesTo(JsonBuilder) Closure closure) {
         def builder = new JsonBuilder()
         closure.resolveStrategy = Closure.DELEGATE_ONLY
@@ -66,66 +62,6 @@ abstract class GurlDsl extends Script {
         aliasesBuilder.content.forEach { key, value ->
             result = result.replaceAll("\\{\\{$key\\}\\}", value)
         }
-//            def variablePattern = Pattern.compile(/\{\{(.+?)}}/)
-//            def matcher = variablePattern.matcher(original)
-//            println matcher.count
-//            while (matcher.find()) {
-//                def variableDeclaration = matcher.group(0)
-//                def variableName = matcher.group(1)
-//                println "found: $variableDeclaration = $variableName"
-//                result = result.replace(variableDeclaration, aliases[variableName])
-//            }
         return result
-    }
-
-    class RequestSpec extends GroovyObjectSupport {
-
-        String url
-        private Map<String, String> headers = [:]
-        private final Map<String, String> aliases
-
-        RequestSpec(Map<String, String> aliases = [:]) {
-            this.aliases = aliases
-        }
-
-        def headers(@DelegatesTo(KeyValueBuilder) Closure closure) {
-            def values = new KeyValueBuilder()
-            def code = closure.rehydrate(values, this, this)
-            code.resolveStrategy = Closure.DELEGATE_ONLY
-            code()
-            this.headers = values.content()
-        }
-
-        def get() {
-            println "GET ${replaceVars(url)} "
-        }
-
-
-        Object invokeMethod(String name, Object args) {
-            if (args == null)
-                return null
-
-            if (Object[].class.isAssignableFrom(args.getClass())) {
-                Object[] arr = (Object[]) args
-                if (arr.length == 0) {
-//                    map[name] = ""
-                } else if (arr.length == 1) {
-                    if (this.properties.containsKey(name)) {
-                        this.setProperty(name, arr[0])
-                    }
-//                    map[name] = arr[0].toString()
-                } else {
-//                    map[name] = args.toString()
-                }
-            }
-            return null
-        }
-
-        def methodMissing(String name, def args) {
-            if (this.properties.containsKey(name))
-                invokeMethod(name, args)
-            else
-                super.methodMissing(name, args)
-        }
     }
 }
