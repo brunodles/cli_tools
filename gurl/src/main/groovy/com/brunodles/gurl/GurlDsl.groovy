@@ -2,6 +2,7 @@ package com.brunodles.gurl
 
 import com.brunodles.gurl.specs.KeyValueBuilder
 import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
 
 /**
  * Main DSL for GURL
@@ -17,8 +18,10 @@ import groovy.json.JsonBuilder
 abstract class GurlDsl extends Script {
     /** Shared file metadata */
     private def metadataBuilder = new JsonBuilder()
-    /** common variables in case the user run this without any external properties */
+    /** Common variables in case the user run this without any external properties */
     private def aliasesBuilder = new KeyValueBuilder()
+    /** Client */
+    private def httpClient = new HttpClient()
 
     /** Create the metadata section, which is a json builder allowing a tree structure */
     def metadata(@DelegatesTo(JsonBuilder) Closure closure) {
@@ -39,17 +42,12 @@ abstract class GurlDsl extends Script {
         def builder = new JsonBuilder()
         closure.resolveStrategy = Closure.DELEGATE_ONLY
         builder.call(closure)
-        def content = builder.content
+//        def content = builder.content
 //        println content.url
-        def connection = replaceVars(content.url).toURL().openConnection() as HttpURLConnection
-        connection.with {
-            setRequestProperty("User-Agent", "GURL")
-            setRequestMethod(content.method ?: "GET")
-        }
-        def responseCode = connection.responseCode
-        def response = connection.inputStream.text
-        println "responseCode: $responseCode"
-        println response
+        // code to json -> replace strings -> from json
+        def content = new JsonSlurper().parseText(replaceVars(builder.toString()))
+
+        httpClient.execute(content)
     }
 
     /** Get a environment variable from system */

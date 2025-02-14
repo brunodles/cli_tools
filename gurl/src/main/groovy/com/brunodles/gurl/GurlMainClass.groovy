@@ -16,7 +16,8 @@ class GurlMainClass {
      * <p>* Arg 1..* = environment variables
      */
     static void main(String[] args) {
-        resetInternalLogger()
+        disableStdError()
+//        resetInternalLogger()
 
         def scriptArgs = args.drop(1)
 
