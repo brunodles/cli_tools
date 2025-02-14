@@ -1,6 +1,8 @@
 package com.brunodles.gurl
 
-import org.apache.groovy.ginq.provider.collection.runtime.NamedRecord
+import jdk.internal.misc.Unsafe
+
+import java.lang.reflect.Field
 
 class GurlMainClass {
 
@@ -9,12 +11,12 @@ class GurlMainClass {
 
     /**
      * Run the script
-     * @param args
-     *
-     * * Arg 0 = path to the script
-     * * Arg 1..* = environment variables
+     * @param args for the script
+     * <p>* Arg 0 = path to the script
+     * <p>* Arg 1..* = environment variables
      */
     static void main(String[] args) {
+        resetInternalLogger()
 
         def scriptArgs = args.drop(1)
 
@@ -25,32 +27,37 @@ class GurlMainClass {
                 .join("\n")
 
         def scriptResult = new ScriptEvaluator(scriptContent, scriptArgs).evaluate()
+        if (scriptResult != null)
+            println scriptResult
+    }
 
-        switch (scriptResult.getClass()) {
-            case List.class:
-                buildListResult((List) scriptResult)
-                break
-//            case String.class:
-            default:
-                println scriptResult
-                break
+    /**
+     * Disable StdErr to prevent warnings
+     *
+     * <p>Source: <a href="https://stackoverflow.com/questions/46454995/how-to-hide-warning-illegal-reflective-access-in-java-9-without-jvm-argument">apangin at StackOverflow thread<a>
+     */
+    private static void disableStdError() {
+        System.err.close();
+        System.setErr(System.out);
+    }
+
+    /**
+     * Reset {@link jdk.internal.module.IllegalAccessLogger} internal Logger
+     *
+     * <p>Source: <a href="https://stackoverflow.com/questions/46454995/how-to-hide-warning-illegal-reflective-access-in-java-9-without-jvm-argument">apangin at StackOverflow thread<a>
+     */
+    private static void resetInternalLogger() {
+        try {
+            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafe.setAccessible(true);
+            Unsafe u = (Unsafe) theUnsafe.get(null);
+
+            Class cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
+            Field logger = cls.getDeclaredField("logger");
+            u.putObjectVolatile(cls, u.staticFieldOffset(logger), null);
+        } catch (Exception e) {
+            // ignore
         }
     }
 
-    static void buildListResult(List scriptResult) {
-        List<NamedRecord> resultList = scriptResult
-
-        if (resultList.isEmpty()) {
-            println "Empty. No data available."
-            return
-        }
-
-        def resultBuilder = new StringBuilder()
-        resultList.forEach { record ->
-            resultBuilder.append(record.join("\t"))
-                    .append("\n")
-        }
-
-        println resultBuilder.toString()
-    }
 }
