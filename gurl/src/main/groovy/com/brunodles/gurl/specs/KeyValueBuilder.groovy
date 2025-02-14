@@ -5,7 +5,13 @@ import groovy.json.JsonBuilder
 /**
  * A builder for creating Maps
  *
- * Inspired by {@code groovy.json.JsonBuilder}
+ * Even if we can create maps in Groovy using {@code [:]},
+ * it breaks the flow of declaration used by invoking closures and setting fields.
+ * Because of that the {@link KeyValueBuilder} will provide the same syntax for creating maps.
+ *
+ * Inspired by {@link groovy.json.JsonBuilder}, which also allows to set maps in using the same syntax.
+ * The key difference is that the {@link groovy.json.JsonBuilder} also allows nested maps,
+ * which is a characteristic that is not presented in the {@link KeyValueBuilder}.
  */
 class KeyValueBuilder extends GroovyObjectSupport {
     private Map<String, String> content = [:]

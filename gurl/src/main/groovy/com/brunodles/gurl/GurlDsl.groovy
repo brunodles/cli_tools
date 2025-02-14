@@ -1,11 +1,21 @@
+package com.brunodles.gurl
+
 import com.brunodles.gurl.specs.KeyValueBuilder
 import groovy.json.JsonBuilder
 
 /**
  * Main DSL for GURL
+ *
+ * Defines the main methods exposed for the users of gurl.
+ *
+ * Public methods here are available to be used as function,
+ * most of them are just wrappers that delegates the execution into another object.
+ * This is interesting as each method might have it's own DSL,
+ * see {@link #aliases} that allows to create custom maps,
+ * and {@link #metadata} that uses {@link JsonBuilder} for creating the RequestJson Schema.
  */
 abstract class GurlDsl extends Script {
-    /** Shared metadata */
+    /** Shared file metadata */
     private def metadataBuilder = new JsonBuilder()
     /** common variables in case the user run this without any external properties */
     private def aliasesBuilder = new KeyValueBuilder()
@@ -71,8 +81,8 @@ abstract class GurlDsl extends Script {
     class RequestSpec extends GroovyObjectSupport {
 
         String url
-        private Map<String,String> headers = [:]
-        private final Map<String,String> aliases
+        private Map<String, String> headers = [:]
+        private final Map<String, String> aliases
 
         RequestSpec(Map<String, String> aliases = [:]) {
             this.aliases = aliases

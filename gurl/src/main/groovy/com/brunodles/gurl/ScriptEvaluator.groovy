@@ -3,10 +3,15 @@ package com.brunodles.gurl
 import org.codehaus.groovy.control.CompilerConfiguration
 
 /**
- * Evaluate the Script and return a TSV
+ * Evaluate the Script, forwarding the call into the {@link GurlDsl} script
+ *
+ * Used to evaluate script files, following the rules and the functions of declared at {@link GurlDsl}
+ * using {@link GroovyShell}.
+ *
+ * Used by the {@link GurlMainClass}.
  */
 class ScriptEvaluator {
-    /** content of the script containing the GQ*/
+    /** content of the script */
     final String scriptContent
     /** args used to initialize the script */
     final String[] args
@@ -29,7 +34,7 @@ class ScriptEvaluator {
                 """
                 """.stripIndent()
         )
-        config.scriptBaseClass = "GurlDsl"
+        config.scriptBaseClass = "com.brunodles.gurl.GurlDsl"
 
         GroovyShell shell = new GroovyShell(classLoader, binding, config)
         shell.setVariable("args", args)
