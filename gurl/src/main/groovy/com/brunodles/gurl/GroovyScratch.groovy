@@ -1,8 +1,5 @@
 package com.brunodles.gurl
 
-import groovy.yaml.YamlBuilder
-import groovy.yaml.YamlSlurper
-
 // todo: extract into a proper test class
 class GroovyScratch {
 
@@ -10,8 +7,8 @@ class GroovyScratch {
 //        def builder = new YamlBuilder()
         def script = """
 metadata {
-    name "Hit simple file"
-    description "Query a simple JSON file"
+    name "Postman Echo"
+    description "Echo service"
     version "0.1.0"
     owner {
         name "Bruno Lima"
@@ -20,16 +17,40 @@ metadata {
 }
 
 aliases {
-    host "raw.githubusercontent.com"
-    "list-value" "as-another-random-thing", "something"
+    host "https://postman-echo.com"
 }
 
 request {
-    url "https://{{host}}/npm/init-package-json/refs/heads/main/package.json"  
+    url "{{host}}"
+    path "post"  
     headers {
       "content-type" "application/json"
     }
-    method: "GET"
+    method "POST"
+    
+    "body:multipart_form" {
+      artist "Skrillex" 
+      song "First of the Year"
+      album "Nice sprites and Scary Monsters"
+      "this is the name" {
+//        "Content-Type" "application/json"
+//        "Content-Transfer-Encoding" "binary"
+//        charset "UTF-8"
+        filename "this-is.txt"
+        content(
+          "wow look at him!",
+          "this content is Jason inside the multipart"          
+        )
+      }       
+    }
+    
+    mock_response {
+        body "wow, this will be crazy"
+    }
+    
+//    test {
+//      assert response.body == ""
+//    }
 }
 
 """.stripIndent()
