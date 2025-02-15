@@ -1,0 +1,47 @@
+meta:
+  name: Sample Schema
+  description: Present how to make requests
+  version: 0.1.0
+
+aliases:
+  host: raw.githubusercontent.com
+  baseUrl: https://{{raw.githubusercontent.com}}
+
+request:sample_get:
+  url: https://{{host}}/npm/init-package-json/refs/heads/main/package.json
+  headers:
+    content-type: application/json
+  method: get
+
+request:sample_full_get:
+  url: https://{{host}}
+  path: npm/init-package-json/refs/heads/main/package.json
+  headers:
+    content-type: application/json
+  query_params:
+    key1: value
+    key2: value
+  method: get
+
+request:sample_default_method:
+  url: {{base_url}}/npm/init-package-json/refs/heads/main/package.json
+
+request:sample_post:
+  url: {{baseUrl}}
+  body: |
+    wow, 
+    this is really good
+
+request:sample_form_url_encoded:
+  url: {{baseUrl}}
+  body:form_urlencoded:
+    user_name: bruno
+    password: 1234567890
+
+request:sample_multiplart_form:
+  url: {{baseUrl}}
+  body:multipart_form:
+    user_name: bruno
+    password: 1234567890
+
+

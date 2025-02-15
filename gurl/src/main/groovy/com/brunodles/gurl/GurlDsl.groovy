@@ -21,7 +21,7 @@ abstract class GurlDsl extends Script {
     /** Common variables in case the user run this without any external properties */
     private def aliasesBuilder = new KeyValueBuilder()
     /** Client */
-    private def httpClient = new HttpClient()
+    private def httpClient = new HttpClientGateway()
 
     /** Create the metadata section, which is a json builder allowing a tree structure */
     def metadata(@DelegatesTo(JsonBuilder) Closure closure) {
@@ -47,7 +47,9 @@ abstract class GurlDsl extends Script {
         // code to json -> replace strings -> from json
         def content = new JsonSlurper().parseText(replaceVars(builder.toString()))
 
-        httpClient.execute(content)
+        def result = httpClient.execute(content)
+        println result.responseCode
+        println result.resultStream.text
     }
 
     /** Get a environment variable from system */
