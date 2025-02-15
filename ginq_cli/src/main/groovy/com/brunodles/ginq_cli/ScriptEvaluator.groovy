@@ -29,7 +29,7 @@ class ScriptEvaluator {
                 """
                 """.stripIndent()
         );
-        config.scriptBaseClass = "GinqCliDsl"
+        config.scriptBaseClass = "com.brunodles.ginq_cli.GinqCliDsl"
 
         GroovyShell shell = new GroovyShell(classLoader, binding, config)
         shell.setVariable("args", MyProxy.create(args))

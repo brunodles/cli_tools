@@ -1,4 +1,4 @@
-#!/usr/bin/env -S sh -c 'exec "`dirname $0`/build/install/ginq_cli/bin/ginq_cli" "$0" "$@"'
+#!/Users/bruno.lima/workspace/cli_tools/ginq_cli/build/install/ginq_cli/bin/ginq_cli
 # to install: Add the bash executable script in the path, so you can replace the relative path above
 # to execute: run `gradle ginq_cli:install` and then execute this file
 

@@ -1,5 +1,10 @@
+package com.brunodles.ginq_cli
+
 /**
  * Main DSL used for GINQ CLI files.
+ *
+ * This file just need to include how to include extra functions for the Script.
+ * Parsing the directories and files into data for the GQ.
  */
 abstract class GinqCliDsl extends Script {
 
@@ -13,6 +18,7 @@ abstract class GinqCliDsl extends Script {
         return Arrays.asList()
     }
 
+    /** Generate random array of integer */
     public Integer[] randomArrayOf(Integer size, Integer min = 0, Integer max = 100) {
         def random = new Random()
         def result = new Integer[size]
@@ -21,12 +27,5 @@ abstract class GinqCliDsl extends Script {
         }
         return result
     }
-
-//    /** Forward the call to the GQ */
-//    public def query(Closure<groovy.ginq.transform.GQ> closure) {
-//        return GQ {
-//            closure()
-//        }
-//    }
 }
 
