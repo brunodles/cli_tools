@@ -22,31 +22,4 @@ dependencies {
     testImplementation "io.mockk:mockk:1.8.13"
 }
 
-jar {
-    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-    manifest {
-        attributes(
-                'Class-Path':
-                        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) },
-                'Main-Class': mainClassName
-        )
-    }
-
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    into ''
-}
-
-task fatJar(type: Jar) {
-    duplicatesStrategy(DuplicatesStrategy.WARN)
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
-    archiveClassifier = "all"
-    from {
-//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    with jar
-}
+apply from: "$rootDir/gradle/jvm_application.gradle"

@@ -1,0 +1,32 @@
+/** Setup the jar file configuration */
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    manifest {
+        attributes(
+                'Class-Path':
+                        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) },
+                'Main-Class': mainClassName
+        )
+    }
+    into ''
+}
+
+task fatJar(type: Jar) {
+    description "Generate a big jar file that contains all the runtime dependencies"
+    duplicatesStrategy(DuplicatesStrategy.WARN)
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    archiveClassifier = "all"
+    from {
+//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+task sharedInstall(type: Copy) {
+    description "Generate the install structure inside the \'$rootDir/build\'"
+    destinationDir = rootProject.file("build/install")
+    with installDist
+}
