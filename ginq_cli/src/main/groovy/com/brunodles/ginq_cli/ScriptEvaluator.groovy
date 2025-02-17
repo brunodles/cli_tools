@@ -1,5 +1,6 @@
 package com.brunodles.ginq_cli
 
+
 import org.codehaus.groovy.control.CompilerConfiguration
 
 /**
@@ -34,8 +35,11 @@ class ScriptEvaluator {
         GroovyShell shell = new GroovyShell(classLoader, binding, config)
         shell.setVariable("args", MyProxy.create(args))
 
-        Script script = shell.parse(scriptContent)
+        GinqCliDsl script = shell.parse(scriptContent) as GinqCliDsl
+        script.args = args
 
-        return script.run()
+        def result = script.run()
+
+        return result
     }
 }

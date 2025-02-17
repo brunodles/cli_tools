@@ -1,6 +1,5 @@
 package com.brunodles.ginq_cli
 
-import org.apache.groovy.ginq.provider.collection.runtime.NamedRecord
 
 import static com.brunodles.ginq_cli.ExtensionFunctions.registerCustomExtensionFunctions
 
@@ -28,33 +27,11 @@ class CliMainClass {
                 .collect { (it.startsWith("#") ? "//$it" : it) }
                 .join("\n")
 
-        def scriptResult = new ScriptEvaluator(scriptContent, scriptArgs).evaluate()
+        def scriptEvaluator = new ScriptEvaluator(scriptContent, scriptArgs)
+        def result = scriptEvaluator.evaluate()
 
-        switch (scriptResult.getClass()) {
-            case List.class:
-                buildListResult((List) scriptResult)
-                break
-//            case String.class:
-            default:
-                println scriptResult
-                break
-        }
-    }
-
-    static void buildListResult(List scriptResult) {
-        List<NamedRecord> resultList = scriptResult
-
-        if (resultList.isEmpty()) {
-            println "Empty. No data available."
-            return
-        }
-
-        def resultBuilder = new StringBuilder()
-        resultList.forEach { record ->
-            resultBuilder.append(record.join("\t"))
-                    .append("\n")
-        }
-
-        println resultBuilder.toString()
+        boolean shouldPrintResult = args.contains("-p")
+        if (shouldPrintResult)
+            println result
     }
 }
