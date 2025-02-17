@@ -1,0 +1,11 @@
+#!/usr/bin/env groovy
+evaluate(new File("./test_functions.groovy"))
+
+import static test_functions.*
+
+println GQ {
+    from n in randomArrayOf(10, 10, 90)
+    where n > 20 && n < 50
+    orderby n
+    select n
+}

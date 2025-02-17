@@ -1,4 +1,6 @@
-#!/Users/bruno.lima/workspace/cli_tools/gurl/build/install/gurl/bin/gurl
+#!gurl
+# to execute this file, the `gurl` need to be in the `PATH`.
+# Check the `install.sh` file at the project root dir
 
 // This metadata can be decoded but it is not used
 metadata {
