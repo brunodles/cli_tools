@@ -105,7 +105,7 @@ internal class FormatDefaultImplementationTest {
             col1111111111,col2,col3333333333
             r1,r2222222222222,r3
             r1,r2,r3
-            -,-,-
+            ,,
             f1,f2,f3
 
         """.trimIndent()

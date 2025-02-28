@@ -16,7 +16,7 @@ sealed class FormatDefaultImplementation(
         innerFormat = CharacterSeparatedValues(
             headerSeparator = ",",
             bodySeparator = ",",
-            footerDividerCellContent = "-"
+            footerDividerCellContent = ""
         )
     )
 

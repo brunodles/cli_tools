@@ -112,7 +112,7 @@ enum class FormatDefault : Format {
                 content.joinToString(cellSeparator)
 
             override fun cell(content: String, size: Int, direction: ColumnDirection): String =
-                "-"
+                ""
         }
         override val footerFormat: Format.ContentFormat? = contentFormat
     },
